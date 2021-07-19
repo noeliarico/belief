@@ -4,12 +4,12 @@ from math import ceil
 from numba import cuda
 from numba import jit
 
+##########################################################################
+
 def alg1CPU(fs, bpa, be, pl):
 
     # iset is the index of one of the nodes in the lattice
     for iset in range(be.shape[0]): 
-        # be[iset] = 0 # commented because I'm passing array of zeros
-        # pl[iset] = 0 # commented because I'm passing array of zeros
         # k is the index of one of the focal elements in fs (the focal set)
         for k in range(bpa.shape[0]):
             el = fs[k] # el is the current focal element to study
@@ -18,6 +18,8 @@ def alg1CPU(fs, bpa, be, pl):
             if (iset & el) > 0: # plausibility: the intersection is not empty
                 pl[iset] += bpa[k]    
     return be, pl
+
+##########################################################################
 
 @jit
 def alg1JIT(fs, bpa, be, pl):
@@ -34,6 +36,8 @@ def alg1JIT(fs, bpa, be, pl):
             if (iset & el) > 0: # plausibility: the intersections is not empty
                 pl[iset] += bpa[k]
     return be, pl
+
+##########################################################################
 
 @cuda.jit
 def alg1GPU(fs, bpa, be, pl):
